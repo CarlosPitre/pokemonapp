@@ -1,9 +1,13 @@
-interface PokemonList {
+export type PokemonList = {
   name: string;
   url: string;
 }
 
-interface GetPokemons {
+export type MyPokemonList = PokemonList & {
+  favorite: boolean,
+}
+
+type GetPokemons = {
   count: string;
   next: string;
   previus: string;
