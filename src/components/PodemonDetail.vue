@@ -28,7 +28,7 @@
       </span>
     </div>
     <div class="actions">
-      <button-primay text="Share to my friends" />
+      <button-primay text="Share to my friends" @onPress="sharePokemon" />
       <button class="icon-container" @click="onPressFavorite">
         <font-awesome-icon icon="star" size="lg" :color="iconFavorite" />
       </button>
@@ -79,6 +79,9 @@ export default defineComponent({
     },
     onClose() {
       this.$emit('onClose');
+    },
+    sharePokemon() {
+      navigator.clipboard.writeText(`Pokemon: ${this.pokemon.name}, weight: ${this.pokemon.weight}, height: ${this.pokemon.height}`);
     },
   },
   computed: {

@@ -15,6 +15,7 @@ export default defineComponent({
 <style scoped lang="scss">
   .container {
     height: 50vh;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;

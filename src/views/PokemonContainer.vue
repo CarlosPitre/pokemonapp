@@ -1,18 +1,16 @@
 <template>
   <div class="main">
-    <div>
-      <div class="container" >
-        <div class="container-input">
-          <font-awesome-icon icon="search" size="lg" color="#BFBFBF" />
-          <input type="text" placeholder="Search" v-model="txtSearch">
-        </div>
-        <pokemon-list-component
-          v-if="!isLoading"
-          :pokemonList="searchPokemons"
-          @showPokemon="showPokemon"
-        />
+    <div class="container" >
+      <div class="container-input">
+        <font-awesome-icon icon="search" size="lg" color="#BFBFBF" />
+        <input type="text" placeholder="Search" v-model="txtSearch">
       </div>
-      <loading v-if="isLoading" />
+      <pokemon-list-component
+        v-if="!isLoading"
+        :pokemonList="searchPokemons"
+        @showPokemon="showPokemon"
+      />
+       <loading v-if="isLoading" />
     </div>
   </div>
   <modal v-if="showDetail">
@@ -160,7 +158,7 @@ export default defineComponent({
     width: 570px;
     min-width: 315px;
     height: fit-content;
-    padding-bottom: 20px;
+    padding: 30px;
   }
   .container-input {
     display: flex;
@@ -168,8 +166,6 @@ export default defineComponent({
     align-items: center;
     padding-left: 15px;
     gap: 15px;
-    width: 550px;
-    min-width: 315px;
     background: #FFFFFF;
     border-radius: 5px;
     height: 50px;
@@ -178,7 +174,6 @@ export default defineComponent({
 
     input {
       border: none;
-      flex: 1;
       font-family: 'Montserrat', sans-serif;
       font-size: 16px;
     }
