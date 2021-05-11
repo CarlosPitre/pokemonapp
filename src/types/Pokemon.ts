@@ -6,6 +6,7 @@ interface TypePokemon {
 }
 
 interface Pokemon {
+  id: string,
   name: string;
   weight: string;
   height: string;
