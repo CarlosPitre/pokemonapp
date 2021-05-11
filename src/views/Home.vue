@@ -6,18 +6,25 @@
       The digital encyclopedia created by Professor Oak is an
       invaluable tool to Trainers in the Pokémon world.
     </p>
-    <button-primary text="Get started" />
+    <button-primary text="Get started" @onPress="navigateToPokemons" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import ButtonPrimary from '@/components/ButtonPrimary.vue';
+// eslint-disable-next-line import/no-cycle
+import router from '@/router';
 
 export default defineComponent({
   name: 'Home',
   components: {
     ButtonPrimary,
+  },
+  methods: {
+    navigateToPokemons() {
+      router.push('pokemons');
+    },
   },
 });
 </script>
@@ -26,7 +33,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
-    height: inherit;
+    height: 100vh;
     flex-direction: column;
   }
   .title {

@@ -1,5 +1,5 @@
 <template>
-  <button class="button-primary">{{ text }}</button>
+  <button class="button-primary" @click="onPressAction">{{ text }}</button>
 </template>
 
 <script lang='ts'>
@@ -9,6 +9,12 @@ export default defineComponent({
   name: 'ButtonPrimary',
   props: {
     text: String,
+  },
+  emits: ['onPress'],
+  methods: {
+    onPressAction() {
+      this.$emit('onPress');
+    },
   },
 });
 </script>
