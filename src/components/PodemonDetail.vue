@@ -29,7 +29,7 @@
     </div>
     <div class="actions">
       <button-primay text="Share to my friends" />
-      <button class="icon-container">
+      <button class="icon-container" @click="onPressFavorite">
         <font-awesome-icon icon="star" size="lg" :color="iconFavorite" />
       </button>
     </div>
@@ -42,7 +42,7 @@ import ButtonPrimay from '@/components/ButtonPrimary.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStar, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { MyPokemonList } from '@/types/GetPokemons';
 
 library.add(faStar, faTimesCircle);
@@ -67,6 +67,16 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(['addFavoriteAction', 'removeFavoriteAction']),
+    onPressFavorite() {
+      const existFavorite = this.myPokemons.map((myPokemon: MyPokemonList) => myPokemon.name)
+        .includes(this.pokemon.name);
+      if (!existFavorite) {
+        this.addFavoriteAction(this.pokemon);
+      } else {
+        this.removeFavoriteAction(this.pokemon.name);
+      }
+    },
     onClose() {
       this.$emit('onClose');
     },
