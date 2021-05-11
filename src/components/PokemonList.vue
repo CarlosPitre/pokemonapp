@@ -1,6 +1,6 @@
 <template>
   <div v-for="(pokemon, index) in pokemonList" :key="index" @click="showPokemon(pokemon.name)">
-   <pokemon-item :name="pokemon.name" :favorite="pokemon.favorite" />
+   <pokemon-item :pokemon="pokemon" />
   </div>
 </template>
 
