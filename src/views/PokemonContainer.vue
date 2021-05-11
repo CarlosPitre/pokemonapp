@@ -55,9 +55,7 @@ interface DataPokemonContainer {
   pokemonClient: PokemonClientInterface;
   pokemonList: Array<PokemonList>;
   pokemon: Pokemon,
-  count: string;
   next: string;
-  previus: string;
   activeAll: boolean,
   activeFavorites: boolean,
   showDetail: boolean,
@@ -80,9 +78,7 @@ export default defineComponent({
       pokemonClient: buildPokemonClient(axiosHttpClient),
       pokemonList: [],
       pokemon: {} as Pokemon,
-      count: '',
       next: '',
-      previus: '',
       activeAll: true,
       activeFavorites: false,
       showDetail: false,
@@ -114,14 +110,10 @@ export default defineComponent({
         const data: GetPokemons = await this.pokemonClient.getPokemons(url);
         const {
           results,
-          count,
           next,
-          previus,
         } = data;
-        this.count = count;
-        this.previus = previus;
         this.next = next;
-        this.pokemonList = results;
+        this.pokemonList = [...this.pokemonList, ...results];
         setTimeout(() => {
           this.isLoading = false;
         }, 4000);
