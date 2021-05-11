@@ -1,10 +1,18 @@
 <template>
   <div class="main">
-    <div class="container">
-      <pokemon-list-component
-        :pokemonList="listPokemons"
-        @showPokemon="showPokemon"
-      />
+    <div>
+      <div class="container" >
+        <div class="container-input">
+          <font-awesome-icon icon="search" size="lg" color="#BFBFBF" />
+          <input type="text" placeholder="Search" v-model="txtSearch">
+        </div>
+        <pokemon-list-component
+          v-if="!isLoading"
+          :pokemonList="searchPokemons"
+          @showPokemon="showPokemon"
+        />
+      </div>
+      <loading v-if="isLoading" />
     </div>
   </div>
   <modal v-if="showDetail">
@@ -32,15 +40,16 @@ import PokemonListComponent from '@/components/PokemonList.vue';
 import ButtonTab from '@/components/ButtonTab.vue';
 import Modal from '@/components/Modal.vue';
 import PokemonDetail from '@/components/PodemonDetail.vue';
+import Loading from '@/components/Loading.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faList, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faList, faStar, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import buildPokemonClient, { PokemonClientInterface } from '@/clients/pokemonClient';
 import axiosHttpClient from '@/api/AxiosHttpClient';
 import GetPokemons, { MyPokemonList, PokemonList } from '@/types/GetPokemons';
 import Pokemon from '@/types/Pokemon';
 
-library.add(faList, faStar);
+library.add(faList, faStar, faSearch);
 
 interface DataPokemonContainer {
   pokemonClient: PokemonClientInterface;
@@ -52,6 +61,8 @@ interface DataPokemonContainer {
   activeAll: boolean,
   activeFavorites: boolean,
   showDetail: boolean,
+  isLoading: boolean,
+  txtSearch: string,
 }
 
 export default defineComponent({
@@ -61,6 +72,7 @@ export default defineComponent({
     FontAwesomeIcon,
     Modal,
     PokemonDetail,
+    Loading,
   },
   name: 'PokemonContainer',
   data(): DataPokemonContainer {
@@ -74,12 +86,19 @@ export default defineComponent({
       activeAll: true,
       activeFavorites: false,
       showDetail: false,
+      isLoading: true,
+      txtSearch: '',
     };
   },
   computed: {
     ...mapState(['myPokemons']),
     listPokemons(): Array<MyPokemonList> {
       return this.activeAll ? this.mapMyPokemonList() : this.myPokemons;
+    },
+    searchPokemons(): Array<MyPokemonList> {
+      const search = this.txtSearch.toLowerCase().trim();
+      if (!search) return this.listPokemons;
+      return this.listPokemons.filter((pokemon) => pokemon.name.toLowerCase().indexOf(search) > -1);
     },
   },
   methods: {
@@ -103,7 +122,11 @@ export default defineComponent({
         this.previus = previus;
         this.next = next;
         this.pokemonList = results;
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 4000);
       } catch (error) {
+        this.isLoading = false;
         console.log(error);
       }
     },
@@ -131,7 +154,7 @@ export default defineComponent({
 });
 </script>
 
-<style scope>
+<style scope lang="scss">
   .main {
     display: flex;
     justify-content: center;
@@ -146,6 +169,30 @@ export default defineComponent({
     min-width: 315px;
     height: fit-content;
     padding-bottom: 20px;
+  }
+  .container-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    gap: 15px;
+    width: 550px;
+    min-width: 315px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    height: 50px;
+    margin-bottom: 40px;
+    margin-top: 35px;
+
+    input {
+      border: none;
+      flex: 1;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+    }
+    input:focus{
+        outline: none;
+    }
   }
   .tabs {
     position: fixed;

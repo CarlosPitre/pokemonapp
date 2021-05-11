@@ -1,5 +1,7 @@
 <template>
-  <img alt="image-logo" src="@/assets/Loader.svg" class="bounce-top" >
+  <div class="container">
+    <img alt="image-logo" src="@/assets/Loader.svg" class="bounce-top" >
+  </div>
 </template>
 
 <script>
@@ -11,8 +13,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+  .container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .bounce-top{
     animation:bounce-top 3s ease-in infinite both;
+    width: 106px;
+    height: 106px;
   }
 
   @keyframes bounce-top {
