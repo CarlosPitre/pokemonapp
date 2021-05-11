@@ -1,11 +1,17 @@
 <template>
   <div class="main">
     <div class="container">
-      <pokemon-list-component :pokemonList="myPokemonList" @showPokemon="showPokemon" />
+      <pokemon-list-component
+        :pokemonList="listPokemons"
+        @showPokemon="showPokemon"
+      />
     </div>
   </div>
   <modal v-if="showDetail">
-    <pokemon-detail :pokemon="pokemon" @onClose="showDetail = false" />
+    <pokemon-detail
+      :pokemon="pokemon"
+      @onClose="showDetail = false"
+    />
   </modal>
   <div class="tabs">
     <button-tab :active="activeAll" @action="showAllPokemons">
@@ -39,7 +45,6 @@ library.add(faList, faStar);
 interface DataPokemonContainer {
   pokemonClient: PokemonClientInterface;
   pokemonList: Array<PokemonList>;
-  myPokemonList: Array<MyPokemonList>;
   pokemon: Pokemon,
   count: string;
   next: string;
@@ -62,7 +67,6 @@ export default defineComponent({
     return {
       pokemonClient: buildPokemonClient(axiosHttpClient),
       pokemonList: [],
-      myPokemonList: [],
       pokemon: {} as Pokemon,
       count: '',
       next: '',
@@ -74,12 +78,16 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['myPokemons']),
+    listPokemons(): Array<MyPokemonList> {
+      return this.activeAll ? this.mapMyPokemonList() : this.myPokemons;
+    },
   },
   methods: {
-    mapMyPokemonList(pokemonList: Array<PokemonList>, myFavorites: Array<MyPokemonList>) {
-      this.myPokemonList = pokemonList.map((pokemon) => ({
+    mapMyPokemonList(): Array<MyPokemonList> {
+      return this.pokemonList.map((pokemon) => ({
         ...pokemon,
-        favorite: myFavorites.map((myPokemon) => myPokemon.name).includes(pokemon.name),
+        favorite: this.myPokemons.map((myPokemon: MyPokemonList) => myPokemon.name)
+          .includes(pokemon.name),
       }));
     },
     async loadPokemon(url?: string) {
@@ -91,7 +99,6 @@ export default defineComponent({
           next,
           previus,
         } = data;
-        this.mapMyPokemonList(results, this.myPokemons);
         this.count = count;
         this.previus = previus;
         this.next = next;
@@ -103,12 +110,10 @@ export default defineComponent({
     showAllPokemons() {
       this.activeFavorites = false;
       this.activeAll = true;
-      this.mapMyPokemonList(this.pokemonList, this.myPokemons);
     },
     showFavorites() {
       this.activeFavorites = true;
       this.activeAll = false;
-      this.myPokemonList = this.myPokemons;
     },
     async showPokemon(pokemonName: string) {
       try {
